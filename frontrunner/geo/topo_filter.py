@@ -43,3 +43,4 @@ def main(key):
 
     real_image[np.where(im == 255)] = [128,0,128]
     cv2.imwrite('eligible_marked.png', real_image)
+    return real_image

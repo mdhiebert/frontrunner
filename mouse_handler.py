@@ -37,6 +37,8 @@ from PIL import Image
 import numpy as np
 import cv2
 from frontrunner.geo.google.maps import StaticMap
+import topo_test
+from frontrunner.utils.route_search import find_and_draw_routes
 
 sm = StaticMap(GOOGLE_API_KEY)
 
@@ -62,9 +64,27 @@ contours, _= cv2.findContours(threshold, cv2.RETR_TREE,
 
 # threshold = cv2.adaptiveThreshold(im,220,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,27,10)
 
+ix,iy = -1,-1
+# mouse callback function
+def draw_circle(event,x,y,flags,param):
+    global ix,iy
+    if event == cv2.EVENT_LBUTTONDOWN:
+        cv2.circle(im,(x,y),7,(0,0,0),-1)
+        ix,iy = x,y
+
+# Create a black image, a window and bind the function to window
+cv2.namedWindow('map')
+cv2.setMouseCallback('map',draw_circle)
+
 while True:
-    try:
-        cv2.imshow('o', im)
-        cv2.waitKey(0)
-    except KeyboardInterrupt:
-        sys.exit(0)
+    cv2.imshow('map',im)
+    k = cv2.waitKey(20) & 0xFF
+    if k == 15:
+        break
+    elif k == ord('a'):
+        print (ix,iy)
+        open_pixels = topo_test.get_open_pixels()
+
+        routes = find_and_draw_routes(im, ix, iy, open_pixels)
+
+cv2.destroyAllWindows()
