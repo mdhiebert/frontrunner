@@ -61,6 +61,9 @@ contours, _= cv2.findContours(threshold, cv2.RETR_TREE,
 # im[im > 154] = 255
 
 # threshold = cv2.adaptiveThreshold(im,220,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,27,10)
-
-cv2.imshow('o', im)
-cv2.waitKey(0)
+while True:
+    try:
+        cv2.imshow('o', im)
+        cv2.waitKey(0)
+    except KeyboardInterrupt:
+        sys.exit(0)
