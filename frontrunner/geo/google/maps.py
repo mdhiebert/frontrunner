@@ -26,6 +26,14 @@ class StaticMap:
 
             format :: str : (optional) defines the format of the resulting image. By default, the Maps Static API creates PNG images. There are several possible formats including GIF, JPEG and PNG types. Which format you use depends on how you intend to present the image. JPEG typically provides greater compression, while GIF and PNG provide greater detail. For more information, see Image Formats.
 
+            maptype :: str : (optional) one of either {roadmap, satellite, terrain, hybrid}. default is roadmap
+
+            language :: str : (optional) the language of this map, default is english
+
+            region :: str : (optional) the regional perspective from which to view this map. default is USA
+
+            hide_overlay :: bool : (optional) whether or not to hide the default overlay graphics provided by google maps API
+
         '''
 
         args = {
@@ -44,11 +52,10 @@ class StaticMap:
         }
 
         if hide_overlay:
-            args['style'] = 'feature:poi|element:labels|visibility:off&style=feature:road|visibility:off&style=feature:road|visibility:off&style=feature:landscape|visibility:off&style=feature:road|visibility:off'
+            args['style'] = 'feature:poi|element:labels|visibility:off&style=feature:road|visibility:off'
+            args['style'] += '&style=feature:road|visibility:off&style=feature:landscape|visibility:off&style=feature:road|visibility:off'
 
         argstring = self._aggregate_args(args)
-
-        # argstring += '&style=feature:landscape.natural.terrain|color:0x00ff00'
 
         res = requests.get(f'{self.BASE_REQUEST}{argstring}')
 
