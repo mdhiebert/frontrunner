@@ -49,7 +49,7 @@ with open('photo.png', 'wb') as f:
 
 
 im = cv2.imread('photo.png', cv2.IMREAD_GRAYSCALE) 
-
+real_im = cv2.imread('photo.png')
 kernel = np.array([[-1,-1,-1], 
                        [-1, 9,-1],
                        [-1,-1,-1]])
@@ -75,16 +75,15 @@ def draw_circle(event,x,y,flags,param):
 # Create a black image, a window and bind the function to window
 cv2.namedWindow('map')
 cv2.setMouseCallback('map',draw_circle)
+cv2.moveWindow('map', 40,30)
 
 while True:
-    cv2.imshow('map',im)
+    cv2.imshow('map',real_im)
     k = cv2.waitKey(20) & 0xFF
     if k == 15:
         break
     elif k == ord('a'):
-        print (ix,iy)
         open_pixels = topo_test.get_open_pixels()
-
-        routes = find_and_draw_routes(im, ix, iy, open_pixels)
+        routes = find_and_draw_routes(real_im, ix, iy, open_pixels)
 
 cv2.destroyAllWindows()

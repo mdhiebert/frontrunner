@@ -34,8 +34,8 @@ def main(key):
     _, closedPixels = cv2.threshold(im, 200, 255, cv2.THRESH_BINARY_INV)
     cv2.imwrite('closed_pixels.png', closedPixels)
 
-    kern = utils.get_kern(20)
-    print(type(kern))
+    kern = utils.get_kern(25)
+    #print(type(kern))
     adjacentToClosedPixels = cv2.filter2D(closedPixels, -1, kern)
     cv2.imwrite('close_to_closed_pixels.png', adjacentToClosedPixels)
     im[np.where(adjacentToClosedPixels == 255)] = [0]
@@ -43,4 +43,14 @@ def main(key):
 
     real_image[np.where(im == 255)] = [128,0,128]
     cv2.imwrite('eligible_marked.png', real_image)
-    return real_image
+    open_pixels = []
+    for i in range(len(im)):
+        for j in range(len(im[0])):
+            
+            if im[i, j] != 0:
+                print(i, j)
+                open_pixels.append((j, i))
+    # open_pixels = np.argwhere(real_image == 255)
+    # print(open_pixels)
+    #print("open from topo", open_pixels)
+    return open_pixels
