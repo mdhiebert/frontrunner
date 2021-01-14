@@ -50,6 +50,7 @@ with open('photo.png', 'wb') as f:
 
 im = cv2.imread('photo.png', cv2.IMREAD_GRAYSCALE) 
 real_im = cv2.imread('photo.png')
+
 kernel = np.array([[-1,-1,-1], 
                        [-1, 9,-1],
                        [-1,-1,-1]])
@@ -77,6 +78,7 @@ cv2.namedWindow('map')
 cv2.setMouseCallback('map',draw_circle)
 cv2.moveWindow('map', 40,30)
 
+topo_im = cv2.imread("filtered_photo.png")
 while True:
     cv2.imshow('map',real_im)
     k = cv2.waitKey(20) & 0xFF
@@ -84,6 +86,6 @@ while True:
         break
     elif k == ord('a'):
         open_pixels = topo_test.get_open_pixels()
-        routes = find_and_draw_routes(real_im, ix, iy, open_pixels)
+        routes = find_and_draw_routes(topo_im, real_im, ix, iy, open_pixels)
 
 cv2.destroyAllWindows()

@@ -1,9 +1,14 @@
+from pathlib import Path
 
 from PIL import Image
 import numpy as np
 import cv2
 from frontrunner.geo.google.maps import StaticMap
 from frontrunner.utils import utils
+
+config = {}
+exec(Path('config.py').read_text(), config)
+DEPLOYMENT_VARS = config['DEPLOYMENT_VARS']
 
 def main(key):
     sm = StaticMap(key)
@@ -34,7 +39,7 @@ def main(key):
     _, closedPixels = cv2.threshold(im, 200, 255, cv2.THRESH_BINARY_INV)
     cv2.imwrite('closed_pixels.png', closedPixels)
 
-    kern = utils.get_kern(25)
+    kern = utils.get_kern(DEPLOYMENT_VARS.flat_size)
     #print(type(kern))
     adjacentToClosedPixels = cv2.filter2D(closedPixels, -1, kern)
     cv2.imwrite('close_to_closed_pixels.png', adjacentToClosedPixels)
@@ -48,7 +53,6 @@ def main(key):
         for j in range(len(im[0])):
             
             if im[i, j] != 0:
-                print(i, j)
                 open_pixels.append((j, i))
     # open_pixels = np.argwhere(real_image == 255)
     # print(open_pixels)
