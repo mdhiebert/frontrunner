@@ -33,7 +33,7 @@ def compute_path(start, end):
         #print('Found path of length %d' % (path.shape[0]))
         maze[path[:, 0], path[:, 1]] = (0, 0, 255)
 
-        cv2.imwrite(OUTP_FPATH, maze)
+        #cv2.imwrite(OUTP_FPATH, maze)
     else:
         #print('no path found')
         pass

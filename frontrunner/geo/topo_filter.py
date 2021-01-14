@@ -35,7 +35,6 @@ def main(key):
 
     # threshold = cv2.adaptiveThreshold(im,220,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,27,10)
 
-    cv2.imwrite('1filter_photo.png', im)
     _, closedPixels = cv2.threshold(im, 200, 255, cv2.THRESH_BINARY_INV)
     cv2.imwrite('closed_pixels.png', closedPixels)
 
@@ -44,8 +43,6 @@ def main(key):
     adjacentToClosedPixels = cv2.filter2D(closedPixels, -1, kern)
     cv2.imwrite('close_to_closed_pixels.png', adjacentToClosedPixels)
     im[np.where(adjacentToClosedPixels == 255)] = [0]
-    cv2.imwrite('eligible.png', im)
-
     real_image[np.where(im == 255)] = [128,0,128]
     cv2.imwrite('eligible_marked.png', real_image)
     open_pixels = []
