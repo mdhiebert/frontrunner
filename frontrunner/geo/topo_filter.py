@@ -45,12 +45,11 @@ def main(key):
     im[np.where(adjacentToClosedPixels == 255)] = [0]
     real_image[np.where(im == 255)] = [128,0,128]
     cv2.imwrite('eligible_marked.png', real_image)
-    open_pixels = []
-    for i in range(len(im)):
-        for j in range(len(im[0])):
-            
-            if im[i, j] != 0:
-                open_pixels.append((j, i))
+    open_pixels = np.where(im != 0)
+    print(open_pixels[0])
+    open_pixels = zip(open_pixels[1], open_pixels[0])
+
+    
     # open_pixels = np.argwhere(real_image == 255)
     # print(open_pixels)
     #print("open from topo", open_pixels)

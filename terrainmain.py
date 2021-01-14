@@ -39,28 +39,44 @@ import cv2
 from frontrunner.geo.google.maps import StaticMap
 from frontrunner.geo.terrain_reader import TerrainReader
 
-sm = StaticMap(GOOGLE_API_KEY)
-tr = TerrainReader()
-
-im = sm.get_map('34.8940847,70.9105576', '13', '640x640', maptype='satellite', scale=2)
-# im = sm.get_map('34.8940847,70.9105576', '13', '640x640', maptype='terrain', scale=2)
-
-with open('photo.png', 'wb') as f:
-    f.write(im)
-
-im = cv2.imread('photo.png')
-im = tr.get_sim_terrain(im)
-
-mask = np.all(im != (0,0,0), axis=-1)
-
-green = np.zeros(im.shape, dtype=np.uint8)
-green[mask] = (255, 0, 0)
 
 
-im = cv2.imread('photo.png')
+def find_open_terrain():
+    sm = StaticMap(GOOGLE_API_KEY)
+    tr = TerrainReader()
 
-overlay = cv2.addWeighted(im,1,green,0.5,0)
-cv2.imwrite('altphoto.png', overlay)
+    im = sm.get_map('34.8940847,70.9105576', '13', '640x640', maptype='satellite', scale=2)
+    # im = sm.get_map('34.8940847,70.9105576', '13', '640x640', maptype='terrain', scale=2)
+    
+    with open('photo.png', 'wb') as f:
+        f.write(im)
+
+    
+    im = cv2.imread('photo.png')
+    im = tr.get_sim_terrain(im)
+
+    mask = np.all(im != (0,0,0), axis=-1)
+
+    green = np.zeros(im.shape, dtype=np.uint8)
+    green[mask] = (255, 0, 0)
+
+    cv2.imwrite("terrain_openings.png", im)
+    main_im = cv2.imread('photo.png')
+
+    overlay = cv2.addWeighted(main_im,1,green,0.5,0)
+    cv2.imwrite('altphoto.png', overlay)
+
+    open_pixels = np.where(im != [0, 0, 0])
+    print(open_pixels[0])
+    open_pixels = zip(open_pixels[1], open_pixels[0])
+
+
+    # open_pixels = []
+    # for i in range(len(im)):
+    #     for j in range(len(im[0])):
+    #         if im[i, j].any() != 0:
+    #             open_pixels.append((j, i))
+    return open_pixels
 
 
 # kernel = np.array([[-1,-1,-1], 

@@ -8,7 +8,7 @@ class Deployment_Vars(NamedTuple):
 DEPLOYMENT_VARS = Deployment_Vars(
     path = "/Users/imiller/Desktop/projects/frontrunner",
     search_diagonally = True,
-    flat_size = 30
+    flat_size = 22,
 
 )
 

@@ -19,7 +19,7 @@ class TerrainReader:
         '''
             Returns a binary image with regions acceptable for landing based solely on satellite imagery as 1, 0 else.
         '''
-
+        
         reduced_image = self.reduce_colors(image, 128)
         mode_pix = self._get_mode_pixel(reduced_image)
 

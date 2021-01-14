@@ -39,6 +39,7 @@ import cv2
 from frontrunner.geo.google.maps import StaticMap
 import topo_test
 from frontrunner.utils.route_search import find_and_draw_routes
+import terrainmain
 
 sm = StaticMap(GOOGLE_API_KEY)
 
@@ -85,7 +86,14 @@ while True:
     if k == 15:
         break
     elif k == ord('a'):
-        open_pixels = topo_test.get_open_pixels()
+        open_topo_pixels = set(topo_test.get_open_pixels())
+        open_terrain_pixels = set(terrainmain.find_open_terrain())
+        print("Finding intersection between 2 sets")
+        open_pixels = list(open_topo_pixels.intersection(open_terrain_pixels))
+        black_im = np.zeros((1280, 1280))
+        for i in open_pixels:
+            black_im[i] = 255
+        cv2.imwrite("final_open_pixels.png", black_im)
         routes = find_and_draw_routes(topo_im, real_im, ix, iy, open_pixels)
 
 cv2.destroyAllWindows()

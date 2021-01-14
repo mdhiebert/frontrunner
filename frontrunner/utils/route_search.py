@@ -17,8 +17,7 @@ def find_optimal_straightline(im, dest_x, dest_y, open_pixels):
         if distance < best:
             best = distance
             sp = (pixel[0], pixel[1])
-    print(sp)
-    print(destination)
+
     print("_________")
     pts = cv.line(im, destination, sp, (128,0,128), 1)
     pts = list(zip(*line(*sp, *destination)))
@@ -47,7 +46,6 @@ def find_optimal_elevation(im, drawable_im, dest_x, dest_y, open_pixels):
     print(destination)
     cv.circle(drawable_im,sp,4,(128,0,0),-1)
     for pt in best_path:
-        print(pt[0])
         drawable_im[pt[1], pt[0]] = [128,0,40]
 
 def find_optimal_avoid_lda(im, dest_x, dest_y, open_pixels):
